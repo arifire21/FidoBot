@@ -1,0 +1,170 @@
+import discord
+from discord.ext.commands import bot
+from discord.ext import commands
+import random
+
+import BotPrivateVals
+
+intents = discord.Intents.default()
+intents.members = True
+client = discord.Client(intents=intents)
+
+# Change only the no_category default string
+new_help_command = commands.DefaultHelpCommand(no_category = "Fido\'s Tricks!")
+
+bot = commands.Bot(command_prefix = '$',
+                    help_command = new_help_command,
+                    intents = intents)      #check if needed
+
+@bot.event
+async def on_ready():
+    print("Hi!")
+    print("Logged in as user {0.user}".format(bot))
+
+#message for testing
+@bot.event
+async def on_message(message):
+    #check to see if bot can see all users, requires intents adjustment in developer portal
+    if message.content.startswith('!member'):
+        for guild in bot.guilds:
+            for member in guild.members:
+                #await message.channel.send("inside for loop")
+                await message.channel.send(str(member)) # or do whatever you wish with the member detail
+
+    #create inital message for color roles -- uncomment color reactions below
+    if message.author.id == BotPrivateVals.onwner_id and message.content.startswith("colorroles"):
+        await message.channel.send("Cool Collar Colors! :sparkles: React to one to change your name color! (when bot is online)")
+    
+    #workaround for role setup, to make bot react to own message, only needs to be used once
+    #TODO: find proper fix for this
+    # if message.author == bot.user:
+    #     await message.add_reaction('🔴')
+    #     await message.add_reaction('🟢')
+    #     await message.add_reaction('🔵')
+    #     await message.add_reaction('🟡')
+    #     await message.add_reaction('🟠')
+    #     await message.add_reaction('🟤')
+    #     await message.add_reaction('🟣')
+    #     await message.add_reaction("\U000026ab")      #(' :black_circle:')
+
+    if message.author == bot.user:
+        return
+
+    if message.content.startswith("test"):
+        await message.channel.send("received")
+    
+    await bot.process_commands(message)
+
+#general purpose commands
+#speak
+@bot.command(help = "-- Generates a random doggo sound")
+async def speak(ctx):
+    barktable = ["Arf!", "Woof!", "Yap!", "Bowwow!", "Bork!"]
+    generated_bark = str(random.choice(barktable))
+    await ctx.send("Fido says {0}".format(generated_bark))
+
+#fetch
+@bot.command(help = "-- What will Fido bring back? [TBD]")
+async def fetch(ctx):
+    fetchtable = ["a bone", "a squirrel", "a tennis ball", "some sticks", "5", "6", "7", "8", "9", "10"]
+    generated_obj = str(random.choice(fetchtable))
+    await ctx.send("Fido brought back {0}".format(generated_obj))
+
+#follow - prints link to devpost submission
+@bot.command(help = "-- Go look at our app!")
+async def follow(ctx):
+    await ctx.send("Follow Fido: https://devpost.com/software/follow-fido")
+
+#Role Testing -- Colors
+@bot.event
+async def on_raw_reaction_add(payload):
+    message_id = payload.message_id
+    if message_id == BotPrivateVals.color_role_msg_id: #id of message with roles, current id is only message w all 8 colors
+        guild_id = payload.guild_id
+        guild = discord.utils.find(lambda g : g.id == guild_id, bot.guilds) #searching thru all guilds that bot can see
+        
+        if payload.emoji.name == '🔴':
+            role = discord.utils.get(guild.roles, name = 'Red')
+            # print('role found')
+        elif payload.emoji.name == '🟢':
+            role = discord.utils.get(guild.roles, name = 'Green')
+            # print('role found')
+        elif payload.emoji.name == '🔵':
+            role = discord.utils.get(guild.roles, name = 'Blue')
+            # print('role found')
+        elif payload.emoji.name == '🟡':
+            role = discord.utils.get(guild.roles, name = 'Yellow')
+            # print('role found')
+        elif payload.emoji.name == '🟠':
+            role = discord.utils.get(guild.roles, name = 'Orange')
+            # print('role found')
+        elif payload.emoji.name == '🟤':
+            role = discord.utils.get(guild.roles, name = 'Brown')
+            # print('role found')
+        elif payload.emoji.name == '🟣':
+            role = discord.utils.get(guild.roles, name = 'Purple')
+            # print('role found')
+        elif payload.emoji.name == '\U000026ab':
+            role = discord.utils.get(guild.roles, name = 'Black')
+            # print('role found')
+        else:
+            role = discord.utils.get(guild.roles, name = payload.emoji.name)    #catch in case???
+        
+        if role is not None:
+            member_id = payload.user_id
+            member = discord.utils.find(lambda m : m.id == payload.user_id, guild.members) #collection of all members
+            if member is not None:
+                await member.add_roles(role)
+                print("role added successfully to {0}".format(member))
+            else:
+                print("Member not found -- from adding.")
+        else:
+            print("Role not found -- from adding.")
+
+#REMOVE role when user un-reacts
+@bot.event
+async def on_raw_reaction_remove(payload):
+    message_id = payload.message_id
+    if message_id == BotPrivateVals.color_role_msg_id: #id of message with roles, current id is only message w all 8 colors
+        guild_id = payload.guild_id
+        guild = discord.utils.find(lambda g : g.id == guild_id, bot.guilds) #searching thru all guilds that bot can see
+        
+        if payload.emoji.name == '🔴':
+            role = discord.utils.get(guild.roles, name = 'Red')
+            # print('role found')
+        elif payload.emoji.name == '🟢':
+            role = discord.utils.get(guild.roles, name = 'Green')
+            # print('role found')
+        elif payload.emoji.name == '🔵':
+            role = discord.utils.get(guild.roles, name = 'Blue')
+            # print('role found')
+        elif payload.emoji.name == '🟡':
+            role = discord.utils.get(guild.roles, name = 'Yellow')
+            # print('role found')
+        elif payload.emoji.name == '🟠':
+            role = discord.utils.get(guild.roles, name = 'Orange')
+            # print('role found')
+        elif payload.emoji.name == '🟤':
+            role = discord.utils.get(guild.roles, name = 'Brown')
+            # print('role found')
+        elif payload.emoji.name == '🟣':
+            role = discord.utils.get(guild.roles, name = 'Purple')
+            # print('role found')
+        elif payload.emoji.name == '\U000026ab':
+            role = discord.utils.get(guild.roles, name = 'Black')
+            # print('role found')
+        else:
+            role = discord.utils.get(guild.roles, name = payload.emoji.name)
+        
+        if role is not None:
+            member_id = payload.user_id
+            member = discord.utils.find(lambda m : m.id == payload.user_id, guild.members) #collection of all members
+            if member is not None:
+                await member.remove_roles(role)
+                print("role removed successfully from {0}".format(member))
+            else:
+                print("Member not found -- from removing.")
+        else:
+            print("Role not found -- from removing.")
+
+bot.run(BotPrivateVals.fido_bot_key)

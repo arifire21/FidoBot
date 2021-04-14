@@ -21,30 +21,29 @@ async def on_ready():
     print("Hi!")
     print("Logged in as user {0.user}".format(bot))
 
-#message for testing
 @bot.event
 async def on_message(message):
     #check to see if bot can see all users, requires intents adjustment in developer portal
-    if message.content.startswith('!member'):
+    if message.author.id == BotPrivateVals.owner_id and message.content.startswith('$member'):
         for guild in bot.guilds:
             for member in guild.members:
                 #await message.channel.send("inside for loop")
                 await message.channel.send(str(member)) # or do whatever you wish with the member detail
 
     #create inital message for color roles -- uncomment color reactions below
-    if message.author.id == BotPrivateVals.onwner_id and message.content.startswith("colorroles"):
+    if message.author.id == BotPrivateVals.owner_id and message.content.startswith("$colorroles"):
         await message.channel.send("Cool Collar Colors! :sparkles: React to one to change your name color! (when bot is online)")
     
     #workaround for role setup, to make bot react to own message, only needs to be used once
     #TODO: find proper fix for this
     # if message.author == bot.user:
     #     await message.add_reaction('🔴')
+    #     await message.add_reaction('🟠')
+    #     await message.add_reaction('🟡')
     #     await message.add_reaction('🟢')
     #     await message.add_reaction('🔵')
-    #     await message.add_reaction('🟡')
-    #     await message.add_reaction('🟠')
-    #     await message.add_reaction('🟤')
     #     await message.add_reaction('🟣')
+    #     await message.add_reaction('🟤')
     #     await message.add_reaction("\U000026ab")      #(' :black_circle:')
 
     if message.author == bot.user:
@@ -64,11 +63,18 @@ async def speak(ctx):
     await ctx.send("Fido says {0}".format(generated_bark))
 
 #fetch
-@bot.command(help = "-- What will Fido bring back? [TBD]")
+@bot.command(help = "-- What will Fido bring back?")
 async def fetch(ctx):
-    fetchtable = ["a bone", "a squirrel", "a tennis ball", "some sticks", "5", "6", "7", "8", "9", "10"]
-    generated_obj = str(random.choice(fetchtable))
-    await ctx.send("Fido brought back {0}".format(generated_obj))
+    nums = ["1", "2", "3", "4", "5", "6", "7"]
+    fetch_table_singular = ["bone", "squirrel", "tennis ball", "stick", "leash", "treat", "chew toy"]
+    fetch_table_plural = ["bones", "squirrels", "tennis balls", "sticks", "leashes", "treats", "chew toys"]
+    generated_num = str(random.choice(nums))
+    if generated_num == "1":
+        generated_fetch = str(random.choice(fetch_table_singular))
+    else:
+        generated_fetch = str(random.choice(fetch_table_plural))
+    combined = str(generated_num + " " + generated_fetch)
+    await ctx.send("Fido brought back {0}".format(combined))
 
 #follow - prints link to devpost submission
 @bot.command(help = "-- Go look at our app!")
@@ -79,7 +85,7 @@ async def follow(ctx):
 @bot.event
 async def on_raw_reaction_add(payload):
     message_id = payload.message_id
-    if message_id == BotPrivateVals.color_role_msg_id: #id of message with roles, current id is only message w all 8 colors
+    if message_id == BotPrivateVals.color_role_msg_id or message_id == BotPrivateVals.cyber_space_color_role_msg_id: #id of message with roles, current id is only message w all 8 colors
         guild_id = payload.guild_id
         guild = discord.utils.find(lambda g : g.id == guild_id, bot.guilds) #searching thru all guilds that bot can see
         
@@ -115,17 +121,17 @@ async def on_raw_reaction_add(payload):
             member = discord.utils.find(lambda m : m.id == payload.user_id, guild.members) #collection of all members
             if member is not None:
                 await member.add_roles(role)
-                print("role added successfully to {0}".format(member))
+                print("role added successfully to {0}".format(member) + " in {0}.".format(guild.name))
             else:
-                print("Member not found -- from adding.")
+                print("Member not found when adding role in {0}.".format(guild.name))
         else:
-            print("Role not found -- from adding.")
+            print("Role not found found when adding role in {0}.".format(guild.name))
 
 #REMOVE role when user un-reacts
 @bot.event
 async def on_raw_reaction_remove(payload):
     message_id = payload.message_id
-    if message_id == BotPrivateVals.color_role_msg_id: #id of message with roles, current id is only message w all 8 colors
+    if message_id == BotPrivateVals.color_role_msg_id or message_id == BotPrivateVals.cyber_space_color_role_msg_id: #id of message with roles, current id is only message w all 8 colors
         guild_id = payload.guild_id
         guild = discord.utils.find(lambda g : g.id == guild_id, bot.guilds) #searching thru all guilds that bot can see
         
@@ -161,10 +167,10 @@ async def on_raw_reaction_remove(payload):
             member = discord.utils.find(lambda m : m.id == payload.user_id, guild.members) #collection of all members
             if member is not None:
                 await member.remove_roles(role)
-                print("role removed successfully from {0}".format(member))
+                print("role removed successfully from {0}".format(member) + " in {0}.".format(guild.name))
             else:
-                print("Member not found -- from removing.")
+                print("Member not found when removing role in {0}.".format(guild.name))
         else:
-            print("Role not found -- from removing.")
+            print("Role not found when removing in {0}.".format(guild.name))
 
 bot.run(BotPrivateVals.fido_bot_key)

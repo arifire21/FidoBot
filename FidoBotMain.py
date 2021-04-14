@@ -81,6 +81,10 @@ async def fetch(ctx):
 async def follow(ctx):
     await ctx.send("Follow Fido: https://devpost.com/software/follow-fido")
 
+@bot.command()
+async def bark(ctx):
+    await ctx.send("@everyone")
+
 #Role Testing -- Colors
 @bot.event
 async def on_raw_reaction_add(payload):

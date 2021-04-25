@@ -54,7 +54,13 @@ async def on_message(message):
     
     await bot.process_commands(message)
 
+#------------------------------------------------------------------#
 #general purpose commands
+#follow - prints link to devpost submission
+@bot.command(help = "-- Look at our app!")
+async def follow(ctx):
+    await ctx.send("Follow Fido: https://devpost.com/software/follow-fido")
+
 #speak
 @bot.command(help = "-- Generates a random doggo sound")
 async def speak(ctx):
@@ -66,8 +72,8 @@ async def speak(ctx):
 @bot.command(help = "-- What will Fido bring back?")
 async def fetch(ctx):
     nums = ["1", "2", "3", "4", "5", "6", "7"]
-    fetch_table_singular = ["bone", "squirrel", "tennis ball", "stick", "leash", "treat", "chew toy"]
-    fetch_table_plural = ["bones", "squirrels", "tennis balls", "sticks", "leashes", "treats", "chew toys"]
+    fetch_table_singular = ["bone", "squirrel", "tennis ball", "stick", "leash", "chew toy"]
+    fetch_table_plural = ["bones", "squirrels", "tennis balls", "sticks", "leashes", "chew toys"]
     generated_num = str(random.choice(nums))
     if generated_num == "1":
         generated_fetch = str(random.choice(fetch_table_singular))
@@ -76,15 +82,35 @@ async def fetch(ctx):
     combined = str(generated_num + " " + generated_fetch)
     await ctx.send("Fido brought back {0}".format(combined))
 
-#follow - prints link to devpost submission
-@bot.command(help = "-- Go look at our app!")
-async def follow(ctx):
-    await ctx.send("Follow Fido: https://devpost.com/software/follow-fido")
+#treat
+@bot.command(help = "-- (arg: whole number) Give Fido a treat! [In development]")
+async def treat(ctx, arg : int):
+    if arg == 1:
+        print("in command")
+        increment_treat(arg)
+        print(BotPrivateVals.total_treats)
+        await ctx.send("You gave Fido 1 treat!\nTotal treats given: " + str(BotPrivateVals.total_treats))
+    else:
+        print("in command")
+        increment_treat(arg)
+        print(BotPrivateVals.total_treats)
+        await ctx.send("You gave Fido {0} treats!\nTotal treats given: ".format(arg) + str(BotPrivateVals.total_treats))
 
-@bot.command()
+@treat.error
+async def show_error(ctx, error):
+    if isinstance(error, commands.MissingRequiredArgument):
+        await ctx.send("You need to specify a whole number of treats!")
+
+#small method for treat, variable test
+def increment_treat(num):
+    BotPrivateVals.total_treats = BotPrivateVals.total_treats + num
+
+#lol
+@bot.command(help = "-- lol")
 async def bark(ctx):
     await ctx.send("@everyone")
 
+#------------------------------------------------------------------#
 #Role Testing -- Colors
 @bot.event
 async def on_raw_reaction_add(payload):

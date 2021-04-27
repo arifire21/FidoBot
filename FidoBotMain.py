@@ -105,6 +105,12 @@ async def show_error(ctx, error):
 def increment_treat(num):
     BotPrivateVals.total_treats = BotPrivateVals.total_treats + num
 
+#bite
+@bot.command(help = "-- bite a random user")
+async def bite(ctx):
+    user = choice(message.channel.guild.members)
+    await ctx.send("@" + user + " was bitten by Fido!")
+
 #lol
 @bot.command(help = "-- lol")
 async def bark(ctx):

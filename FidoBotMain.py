@@ -1,8 +1,8 @@
 import discord
+# from discord_slash.utils.manage_commands import create_option
 from discord.ext.commands import bot
 from discord.ext import commands
 import random
-
 import BotPrivateVals
 
 intents = discord.Intents.default()
@@ -106,10 +106,18 @@ def increment_treat(num):
     BotPrivateVals.total_treats = BotPrivateVals.total_treats + num
 
 #bite
-@bot.command(help = "-- bite a random user")
-async def bite(ctx):
-    user = choice(message.channel.guild.members)
-    await ctx.send("@" + user + " was bitten by Fido!")
+# @bot.command(help = "-- bite a random user")
+# async def bite(ctx):
+#     # user = random.choice(message.channel.guild.members)
+#     user = random.choice(channel.guild.members)
+#     print(str(user))
+#     # await ctx.send("@" + user + " was bitten by Fido!")
+#     await ctx.send("check console log")
+
+# @bite.error
+# async def show_error(ctx, error):
+#     if isinstance(error, commands.):
+#         await ctx.send("You need to specify a whole number of treats!")
 
 #lol
 @bot.command(help = "-- lol")

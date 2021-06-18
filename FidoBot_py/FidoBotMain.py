@@ -116,8 +116,8 @@ def increment_treat(num):
 
 # @bite.error
 # async def show_error(ctx, error):
-#     if isinstance(error, commands.):
-#         await ctx.send("You need to specify a whole number of treats!")
+# if isinstance(error, commands.MissingRequiredArgument):
+#         await ctx.send("You need to specify user!")
 
 #lol
 @bot.command(help = "-- lol")

@@ -17,11 +17,11 @@ client.once('ready', () => {
 	console.log('FidoBot-- js version! Ready!');
 	client.user.setPresence({ activity: { name: 'Companion to the Follow Fido app!' }, status: 'online' });
 	
-	//test for single server, not global
-	client.api.applications(client.user.id).guilds(config.guild1).commands.post({
+	//test for global cmd
+	client.api.applications(client.user.id).commands.post({
 		data: {
 			name: 'bork',
-			description: "slash cmd--reply w a message"
+			description: "reply w a message"
 		}
 	});
 
@@ -34,7 +34,7 @@ client.once('ready', () => {
 				data: {
 					type: 4,
 					data: {
-						content: "First slash command!"
+						content: "First slash command! Integration with the Follow Fido app is coming soon!"
 					}
 				}
 			});
@@ -42,22 +42,22 @@ client.once('ready', () => {
 	});
 });
 
+//for non-slash commands
+client.on('message', message => {
+	if (!message.content.startsWith(config.prefix) || message.author.bot) return;
 
-// client.on('message', message => {
-// 	if (!message.content.startsWith(config.prefix) || message.author.bot) return;
+	const args = message.content.slice(config.prefix.length).trim().split(/ +/);
+	const command = args.shift().toLowerCase();
 
-// 	const args = message.content.slice(config.prefix.length).trim().split(/ +/);
-// 	const command = args.shift().toLowerCase();
+	if (!client.commands.has(command)) return;
 
-// 	if (!client.commands.has(command)) return;
-
-// 	try {
-// 		client.commands.get(command).execute(message, args);
-// 	} catch (error) {
-// 		console.error(error);
-// 		message.reply('there was an error trying to execute that command!');
-// 	}
-// });
+	try {
+		client.commands.get(command).execute(message, args);
+	} catch (error) {
+		console.error(error);
+		message.reply('there was an error trying to execute that command!');
+	}
+});
 
 
 client.login(config.token);

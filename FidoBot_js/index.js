@@ -19,7 +19,7 @@ client.once('ready', () => {
 	client.user.setPresence({ activity: { name: 'Companion to the Follow Fido app!' }, status: 'online' });
 	
 	//test for global cmd
-	client.api.applications(client.user.id).guilds(config.guild1).commands.post({
+	client.api.applications(client.user.id).commands.post({
 		data: {
 			name: 'bork',
 			description: "reply w a message"
@@ -33,7 +33,7 @@ client.once('ready', () => {
 	client.ws.on('INTERACTION_CREATE', async interaction => {
 		const command = interaction.data.name.toLowerCase();
 		const args = interaction.data.options;
-
+		//test cmds
 		if(command == 'bork'){
 			client.api.interactions(interaction.id, interaction.token).callback.post({
 				data: {
@@ -53,25 +53,11 @@ client.once('ready', () => {
 				}
 			});
 
-			axios.patch(`https://discord.com/api/v8/webhooks/${config.appid}/${interaction.token}/messages/@original`, { content: 'New content' });
-
+			axios.patch(`https://discord.com/api/v8/webhooks/${config.appid}/${interaction.token}/messages/@original`,
+				{ content: 'Test for future authentication stuff!' });
 		}
 	});
 });
-
-// const editInteraction = async (client, interaction, response) => {
-//     // Set the data as embed if reponse is an embed object else as content
-//     const data = typeof response === 'object' ? { embeds: [ response ] } : { content: response };
-//     // Get the channel object by channel id:
-//     const channel = await client.channels.resolve(interaction.channel_id);
-//     // Edit the original interaction response:
-//     return axios
-//         .patch(`https://discord.com/api/v8/webhooks/${appId}/${interaction.token}/messages/@original`, data)
-//         .then((answer) => {
-//             // Return the message object:
-//             return channel.messages.fetch(answer.data.id)
-//         })
-// };
 
 //for non-slash commands
 client.on('message', message => {

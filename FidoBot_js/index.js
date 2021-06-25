@@ -1,9 +1,9 @@
 const fs = require('fs');
+const axios = require('axios'); //for updating "listening" message
 const config = require('./config.json');
 const Discord = require('discord.js');
 const client = new Discord.Client();
 client.commands = new Discord.Collection();
-const axios = require('axios');
 
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 
@@ -18,7 +18,8 @@ client.once('ready', () => {
 	console.log('FidoBot-- js version! Ready!');
 	client.user.setPresence({ activity: { name: 'Companion to the Follow Fido app!' }, status: 'online' });
 	
-	//test for global cmd
+	//TODO: Check how to delete old guild-specifc commands. The old "bork" still shows up in guild2
+		//(also will be useful when real commands start getting used)
 	client.api.applications(client.user.id).commands.post({
 		data: {
 			name: 'bork',
@@ -33,7 +34,6 @@ client.once('ready', () => {
 	client.ws.on('INTERACTION_CREATE', async interaction => {
 		const command = interaction.data.name.toLowerCase();
 		const args = interaction.data.options;
-		//test cmds
 		if(command == 'bork'){
 			client.api.interactions(interaction.id, interaction.token).callback.post({
 				data: {
@@ -59,6 +59,7 @@ client.once('ready', () => {
 	});
 });
 
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
 //for non-slash commands
 client.on('message', message => {
 	if (!message.content.startsWith(config.prefix) || message.author.bot) return;
@@ -72,9 +73,8 @@ client.on('message', message => {
 		client.commands.get(command).execute(message, args);
 	} catch (error) {
 		console.error(error);
-		message.reply('there was an error trying to execute that command!');
+		message.reply('There was an error trying to execute that command!');
 	}
 });
-
 
 client.login(config.token);

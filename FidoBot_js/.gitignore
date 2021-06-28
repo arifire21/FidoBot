@@ -3,5 +3,3 @@ __pycache__
 logo.png
 config.json
 node_modules/
-package.json
-package-lock.json

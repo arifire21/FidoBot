@@ -1,15 +1,17 @@
-const red_emoji = '🔴';
-const orange_emoji = '🟠';
-const yellow_emoji = '🟡';
-const green_emoji = '🟢';
-const blue_emoji = '🔵';
-const purple_emoji = '🟣';
-const brown_emoji = '🟤';
+const config = require('../config.json');
 
 module.exports = {
     name: 'colorroles',
 	description: 'Create set of color emojis and handle reaction/removal',
-	execute(message, args) {
+	async execute(message, args, Discord, client) {
+		const red_emoji = '🔴';
+		const orange_emoji = '🟠';
+		const yellow_emoji = '🟡';
+		const green_emoji = '🟢';
+		const blue_emoji = '🔵';
+		const purple_emoji = '🟣';
+		const brown_emoji = '🟤';
+
 		const red_role = message.guild.roles.cache.find(role => role.name === "Red");
 		const orange_role = message.guild.roles.cache.find(role => role.name === "Orange");
 		const yellow_role = message.guild.roles.cache.find(role => role.name === "Yellow");
@@ -31,7 +33,79 @@ module.exports = {
             }	//end function
 		);	//end then, send
 		
-		//TODO add remove handling
+		client.on('messageReactionAdd', async (reaction, user) => {
+			//event checks
+			if(reaction.message.partial) await reaction.message.fetch();
+			if(reaction.partial) await reaction.fetch();
+			if(user.bot) return; //do nothing
+			if(!reaction.message.guild) return; //check if reaction is in guild and do nothing if not
+
+			//check only in specific channel
+			if(reaction.message.channel.id === config.role_channel_cyber || reaction.message.channel.id === config.role_channel_ff){
+				if(reaction.emoji.name === red_emoji){
+					await reaction.message.guild.members.cache.get(user.id).roles.add(red_role);
+				}
+				else if(reaction.emoji.name === orange_emoji){
+					await reaction.message.guild.members.cache.get(user.id).roles.add(orange_role);
+				}
+				else if(reaction.emoji.name === yellow_emoji){
+					await reaction.message.guild.members.cache.get(user.id).roles.add(yellow_role);
+				}
+				else if(reaction.emoji.name === green_emoji){
+					await reaction.message.guild.members.cache.get(user.id).roles.add(green_role);
+				}
+				else if(reaction.emoji.name === blue_emoji){
+					await reaction.message.guild.members.cache.get(user.id).roles.add(blue_role);
+				}
+				else if(reaction.emoji.name === purple_emoji){
+					await reaction.message.guild.members.cache.get(user.id).roles.add(purple_role);
+				}
+				else if(reaction.emoji.name === brown_emoji){
+					await reaction.message.guild.members.cache.get(user.id).roles.add(brown_role);
+				}
+			}
+			//if not that channel...
+			else{
+				return;
+			}
+		});	 //end messageReactionAdd
+
+		client.on('messageReactionRemove', async (reaction, user) => {
+			//event checks
+			if(reaction.message.partial) await reaction.message.fetch();
+			if(reaction.partial) await reaction.fetch();
+			if(user.bot) return; //do nothing
+			if(!reaction.message.guild) return; //check if reaction is in guild and do nothing if not
+
+			//check only in specific channel
+			if(reaction.message.channel.id === config.role_channel_cyber || reaction.message.channel.id === config.role_channel_ff){
+				if(reaction.emoji.name === red_emoji){
+					await reaction.message.guild.members.cache.get(user.id).roles.remove(red_role);
+				}
+				else if(reaction.emoji.name === orange_emoji){
+					await reaction.message.guild.members.cache.get(user.id).roles.remove(orange_role);
+				}
+				else if(reaction.emoji.name === yellow_emoji){
+					await reaction.message.guild.members.cache.get(user.id).roles.remove(yellow_role);
+				}
+				else if(reaction.emoji.name === green_emoji){
+					await reaction.message.guild.members.cache.get(user.id).roles.remove(green_role);
+				}
+				else if(reaction.emoji.name === blue_emoji){
+					await reaction.message.guild.members.cache.get(user.id).roles.remove(blue_role);
+				}
+				else if(reaction.emoji.name === purple_emoji){
+					await reaction.message.guild.members.cache.get(user.id).roles.remove(purple_role);
+				}
+				else if(reaction.emoji.name === brown_emoji){
+					await reaction.message.guild.members.cache.get(user.id).roles.remove(brown_role);
+				}
+			}
+			//if not that channel...
+			else{
+				return;
+			}
+		});	 //end messageReactionRemove
 		
 	},	//end execute	
 }	//end export

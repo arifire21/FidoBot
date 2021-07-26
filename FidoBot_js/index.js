@@ -2,7 +2,7 @@ const fs = require('fs');
 const axios = require('axios'); //for updating "listening" message
 const config = require('./config.json');
 const Discord = require('discord.js');
-const client = new Discord.Client();
+const client = new Discord.Client({partials: ["MESSAGE", "CHANNEL", "REACTION"]});
 client.commands = new Discord.Collection();
 
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
@@ -17,6 +17,7 @@ for (const file of commandFiles) {
 client.once('ready', () => {
 	console.log('FidoBot-- js version! Ready!');
 	client.user.setPresence({ activity: { name: 'Companion to the Follow Fido app!' }, status: 'online' });
+	// client.user.setPresence({ activity: { name: 'TESTING COMMANDS' }, status: 'dnd' });
 	
 	//TODO: Check how to delete old guild-specifc commands. The old "bork" still shows up in guild2
 		//(also will be useful when real commands start getting used)
@@ -57,7 +58,7 @@ client.once('ready', () => {
 				{ content: 'Test for future authentication stuff!' });
 		}
 	});
-});
+}); //end ready
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
 //for non-slash commands
@@ -70,7 +71,12 @@ client.on('message', message => {
 	if (!client.commands.has(command)) return;
 
 	try {
+		if(command === 'colorroles'){
+			client.commands.get('colorroles').execute(message, args, Discord, client);
+		}
+		else{
 		client.commands.get(command).execute(message, args);
+		}
 	} catch (error) {
 		console.error(error);
 		message.reply('There was an error trying to execute that command!');

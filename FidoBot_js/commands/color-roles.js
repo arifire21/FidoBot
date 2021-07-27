@@ -42,30 +42,44 @@ module.exports = {
 
 			//check only in specific channel
 			if(reaction.message.channel.id === config.role_channel_cyber || reaction.message.channel.id === config.role_channel_ff){
+				let currentMember = '';
+				let currentRole = '';
+				let currentChannel = '';
+
+				if(reaction.message.channel.id === config.role_channel_cyber){
+					currentChannel = reaction.message.channel.name;
+				}else{
+					currentChannel = reaction.message.channel.name;
+				}
+
 				try{
 					if(reaction.emoji.name === red_emoji){
 						await reaction.message.guild.members.cache.get(user.id).roles.add(red_role);
+						// console.log("Red added to ")
+						currentMember = user.name;
+						currentRole = "red_role";
 					}
-					else if(reaction.emoji.name === orange_emoji){
+					if(reaction.emoji.name === orange_emoji){
 						await reaction.message.guild.members.cache.get(user.id).roles.add(orange_role);
 					}
-					else if(reaction.emoji.name === yellow_emoji){
+					if(reaction.emoji.name === yellow_emoji){
 						await reaction.message.guild.members.cache.get(user.id).roles.add(yellow_role);
 					}
-					else if(reaction.emoji.name === green_emoji){
+					if(reaction.emoji.name === green_emoji){
 						await reaction.message.guild.members.cache.get(user.id).roles.add(green_role);
 					}
-					else if(reaction.emoji.name === blue_emoji){
+					if(reaction.emoji.name === blue_emoji){
 						await reaction.message.guild.members.cache.get(user.id).roles.add(blue_role);
 					}
-					else if(reaction.emoji.name === purple_emoji){
+					if(reaction.emoji.name === purple_emoji){
 						await reaction.message.guild.members.cache.get(user.id).roles.add(purple_role);
 					}
-					else if(reaction.emoji.name === brown_emoji){
+					if(reaction.emoji.name === brown_emoji){
 						await reaction.message.guild.members.cache.get(user.id).roles.add(brown_role);
 					}
+					console.log("Added " + currentRole + " to " + currentMember + " in " + currentChannel);
 				}catch(error){
-					console.error(error);
+					console.log(error);
 				}
 			}
 			//if not that channel...
@@ -87,26 +101,26 @@ module.exports = {
 					if(reaction.emoji.name === red_emoji){
 						await reaction.message.guild.members.cache.get(user.id).roles.remove(red_role);
 					}
-					else if(reaction.emoji.name === orange_emoji){
+					if(reaction.emoji.name === orange_emoji){
 						await reaction.message.guild.members.cache.get(user.id).roles.remove(orange_role);
 					}
-					else if(reaction.emoji.name === yellow_emoji){
+					if(reaction.emoji.name === yellow_emoji){
 						await reaction.message.guild.members.cache.get(user.id).roles.remove(yellow_role);
 					}
-					else if(reaction.emoji.name === green_emoji){
+					if(reaction.emoji.name === green_emoji){
 						await reaction.message.guild.members.cache.get(user.id).roles.remove(green_role);
 					}
-					else if(reaction.emoji.name === blue_emoji){
+					if(reaction.emoji.name === blue_emoji){
 						await reaction.message.guild.members.cache.get(user.id).roles.remove(blue_role);
 					}
-					else if(reaction.emoji.name === purple_emoji){
+					if(reaction.emoji.name === purple_emoji){
 						await reaction.message.guild.members.cache.get(user.id).roles.remove(purple_role);
 					}
-					else if(reaction.emoji.name === brown_emoji){
+					if(reaction.emoji.name === brown_emoji){
 						await reaction.message.guild.members.cache.get(user.id).roles.remove(brown_role);
 					}
 				}catch(error){
-					console.error(error);
+					console.log(error);
 				}
 			}
 			//if not that channel...

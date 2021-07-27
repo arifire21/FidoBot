@@ -3,15 +3,12 @@ const Discord = require('discord.js');
 var dogNameArg = '';
 var dogBreed = '';
 
-
 function capitalizeDogName(dogName){
 	return dogNameArg = charAt(0).toUpperCase() + dogNameArg.slice(1);
 }
 
 const dogProfile = new Discord.MessageEmbed()
-    //todo ping user when embed is shown
     .setColor('#45C3D6')
-    // .setTitle(dogNameArg)
     .setTitle('Dog Name')
     .setAuthor('Follow Fido App')
     //commented out to avoid taking up resources, will replace with actual user acc stuff    
@@ -31,13 +28,13 @@ const dogProfile = new Discord.MessageEmbed()
         const user = message.author;
         dogNameArg = args[0];
         dogBreed = args[1];
-        // console.log(dogNameArg);
 
         if(!dogNameArg){
             message.reply('you need to provide a single dog name.');
         }
         else{
             message.channel.send(`<@${user.id}> Profile for your dog \`` + dogNameArg + `\``);
+            capitalizeDogName(dogNameArg);
             dogProfile.setTitle(dogNameArg);
             dogProfile.addFields(
                 { name: 'Breed', value: dogBreed },

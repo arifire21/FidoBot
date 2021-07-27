@@ -2,6 +2,11 @@ const Discord = require('discord.js');
 // const index = require('./../index.js');
 let dogNameArg = '';
 
+
+function capitalizeDogName(dogName){
+	return dogNameArg = charAt(0).toUpperCase() + dogNameArg.slice(1);
+}
+
 const dogProfile = new Discord.MessageEmbed()
     //todo ping user when embed is shown
     .setColor('#45C3D6')

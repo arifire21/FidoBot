@@ -24,11 +24,11 @@ client.once('ready', () => {
 	client.api.applications(client.user.id).commands.post({
 		data: {
 			name: 'bork',
-			description: "reply w a message"
+			description: "reply w a message. Args: none"
 		},
 		data: {
 			name: 'typetest',
-			description: "test typing duration"
+			description: "test typing duration. Args: none"
 		}
 	});
 
@@ -47,7 +47,6 @@ client.once('ready', () => {
 		}
 
 		if(command == 'typetest'){
-			// client
 			client.api.interactions(interaction.id, interaction.token).callback.post({
 				data: {
 					type: 5,

@@ -1,6 +1,7 @@
 const fs = require('fs');
 const axios = require('axios'); //for updating "listening" message
 const config = require('./config.json');
+const testVisibility = require('./follow-fido integration/test_visibility');
 const Discord = require('discord.js');
 const client = new Discord.Client({partials: ["MESSAGE", "CHANNEL", "REACTION"]});
 client.commands = new Discord.Collection();
@@ -16,19 +17,27 @@ for (const file of commandFiles) {
 
 client.once('ready', () => {
 	console.log('FidoBot-- js version! Ready!');
-	client.user.setPresence({ activity: { name: 'Companion to the Follow Fido app!' }, status: 'online' });
-	// client.user.setPresence({ activity: { name: 'TESTING COMMANDS' }, status: 'dnd' });
+	//client.user.setPresence({ activity: { name: 'Companion to the Follow Fido app!' }, status: 'online' });
+	client.user.setPresence({ activity: { name: 'TESTING COMMANDS' }, status: 'dnd' });
 	
 	//TODO: Check how to delete old guild-specifc commands. The old "bork" still shows up in guild2
 		//(also will be useful when real commands start getting used)
-	client.api.applications(client.user.id).commands.post({
+	client.api.applications(client.user.id).guilds('808460437188247594').commands.post({
 		data: {
 			name: 'bork',
-			description: "reply w a message"
+			description: "args: none"
 		},
 		data: {
 			name: 'typetest',
-			description: "test typing duration"
+			description: "args: none"
+		},
+		data: {
+			name: 'visibilitytest',
+			description: "args: none"
+		},
+		data: {
+			name: 'dummyauth',
+			description: "temp"
 		}
 	});
 
@@ -47,7 +56,6 @@ client.once('ready', () => {
 		}
 
 		if(command == 'typetest'){
-			// client
 			client.api.interactions(interaction.id, interaction.token).callback.post({
 				data: {
 					type: 5,
@@ -57,6 +65,45 @@ client.once('ready', () => {
 			axios.patch(`https://discord.com/api/v8/webhooks/${config.appid}/${interaction.token}/messages/@original`,
 				{ content: 'Test for future authentication stuff!' });
 		}
+
+		if(command == 'visibilitytest'){
+			let newStr = testVisibility.testMethod();
+			console.log(newStr);
+			client.api.interactions(interaction.id, interaction.token).callback.post({
+				data: {
+					type: 4,
+					data: {
+						content: newStr,
+						ephemeral: true,
+					}
+				}
+			});
+		}
+
+		if(command == 'dummyauth'){
+
+
+			client.api.interactions(interaction.id, interaction.token).callback.post({
+				data: {
+					type: 5,
+					ephemeral: true,
+					options: [{
+						name: '@user',
+						type: 'USER',
+						description: 'The user to auth id',
+						required: true,
+					}],
+				}
+			});
+
+			if(interaction.member.id != options[1].id){
+				interaction.reply('Owner and argument do not match');
+			}else{
+			axios.patch(`https://discord.com/api/v8/webhooks/${config.appid}/${interaction.token}/messages/@original`,
+				{ content: 'Login!' });
+			}
+		}
+
 	});
 }); //end ready
 
@@ -82,5 +129,16 @@ client.on('message', message => {
 		message.reply('There was an error trying to execute that command!');
 	}
 });
+
+//for interaction
+function getUserFromMention(mention) {
+	if (!mention) return;
+
+	if (mention.startsWith('<@') && mention.endsWith('>')) {
+		mention = mention.slice(2, -1);
+
+		return client.users.cache.get(mention);
+	}
+}
 
 client.login(config.token);

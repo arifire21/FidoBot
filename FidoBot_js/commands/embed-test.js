@@ -19,9 +19,9 @@ const dogProfile = new Discord.MessageEmbed()
 	// 	{ name: 'Today\'s Walk Dist.', value: 'Some value here', inline: true },
 	// 	{ name: 'Inline field title', value: 'Some value here', inline: true },
     // )
-	;
+;
 
-    module.exports = {
+module.exports = {
     name: 'embedtest',
 	description: 'test',
 	execute(message, args) {

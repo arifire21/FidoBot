@@ -12,7 +12,7 @@ const dogProfile = new Discord.MessageEmbed()
     .setTitle('Dog Name')
     .setAuthor('Follow Fido App')
     //commented out to avoid taking up resources, will replace with actual user acc stuff    
-    // .setThumbnail('https://raw.githubusercontent.com/arifire21/FidoBot/main/FidoBot_js/dog_icons/dog1.png')
+    .setThumbnail('https://raw.githubusercontent.com/arifire21/FidoBot/main/FidoBot_js/dog_icons/dog1.png')
     // .addFields(
 	// 	{ name: 'Breed', value: 'Some value here' },
 	// 	{ name: '\u200B', value: '\u200B' },
@@ -34,7 +34,7 @@ module.exports = {
         }
         else{
             message.channel.send(`<@${user.id}> Profile for your dog \`` + dogNameArg + `\``);
-            capitalizeDogName(dogNameArg);
+            // capitalizeDogName(dogNameArg);
             dogProfile.setTitle(dogNameArg);
             dogProfile.addFields(
                 { name: 'Breed', value: dogBreed },

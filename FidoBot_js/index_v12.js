@@ -18,8 +18,8 @@ for (const file of commandFiles) {
 
 client.once('ready', () => {
 	console.log('FidoBot-- js version! Ready!');
-	//client.user.setPresence({ activity: { name: 'Companion to the Follow Fido app!' }, status: 'online' });
-	client.user.setPresence({ activity: { name: 'TESTING COMMANDS' }, status: 'dnd' });
+	client.user.setPresence({ activity: { name: 'Companion to the Follow Fido app!' }, status: 'online' });
+	// client.user.setPresence({ activity: { name: 'TESTING COMMANDS' }, status: 'dnd' });
 	
 	//TODO: Check how to delete old guild-specifc commands. The old "bork" still shows up in guild2
 		//(also will be useful when real commands start getting used)

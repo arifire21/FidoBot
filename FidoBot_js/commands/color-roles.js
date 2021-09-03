@@ -1,4 +1,20 @@
 const config = require('../config.json');
+const Discord = require('discord.js');
+
+const colorEmbed = new Discord.MessageEmbed()
+    .setColor('#45C3D6')
+    .setTitle('Color Roles!')
+	.setDescription(':sparkles: React to one to change your name color!')
+	.addFields(
+	{name: '🔴', value: '<@&825591949439926334>'},
+	{name: '🟠', value: '<@&825822026148085760>'},
+	{name: '🟡', value: '<@&825822082591358976>'},
+	{name: '🟢', value: '<@&825822121778348052>'},
+	{name: '🔵', value: '<@&825822159690924062>'},
+	{name: '🟣', value: '<@&825822195312885770>'},
+	{name: '🟤', value: '<@&825822234194477086>'},
+	)
+;
 
 module.exports = {
     name: 'colorroles',
@@ -21,7 +37,8 @@ module.exports = {
 		const brown_role = message.guild.roles.cache.find(role => role.name === "Brown");
 
 		//reaction setup
-        message.channel.send('Cool collar colors! :sparkles: React to one to change your name color!')
+        // message.channel.send('Cool collar colors! :sparkles: React to one to change your name color!')
+		message.channel.send(colorEmbed)
             .then(function (message){
                 message.react(red_emoji)
                 message.react(orange_emoji)

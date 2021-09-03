@@ -3,7 +3,7 @@ const config = require('../config.json');
 module.exports = {
     name: 'colorroles',
 	description: 'Create set of color emojis and handle reaction/removal',
-	async execute(message, args, Discord, client) {
+	async execute(message, Discord, client) {
 		const red_emoji = '🔴';
 		const orange_emoji = '🟠';
 		const yellow_emoji = '🟡';
@@ -33,7 +33,10 @@ module.exports = {
             }	//end function
 		);	//end then, send
 		
-		client.on('messageReactionAdd', async (reaction, user) => {
+		// client.on('messageReactionAdd', async (reaction, user) => {
+		client.on('messageReactionAdd',async (potentialPartialReaction, potentialPartialUser) => {
+			const reaction = await potentialPartialReaction.fetch();
+			const user = await potentialPartialUser.fetch();
 			//event checks
 			if(reaction.message.partial) await reaction.message.fetch();
 			if(reaction.partial) await reaction.fetch();
@@ -55,8 +58,7 @@ module.exports = {
 				try{
 					if(reaction.emoji.name === red_emoji){
 						await reaction.message.guild.members.cache.get(user.id).roles.add(red_role);
-						// console.log("Red added to ")
-						currentMember = user.name;
+						currentMember = reaction.user.name;
 						currentRole = "red_role";
 					}
 					if(reaction.emoji.name === orange_emoji){
@@ -88,7 +90,10 @@ module.exports = {
 			}
 		});	 //end messageReactionAdd
 
-		client.on('messageReactionRemove', async (reaction, user) => {
+		// client.on('messageReactionRemove', async (reaction, user) => {
+		client.on('messageReactionRemove',async (potentialPartialReaction, potentialPartialUser) => {
+			const reaction = await potentialPartialReaction.fetch();
+			const user = await potentialPartialUser.fetch();
 			//event checks
 			if(reaction.message.partial) await reaction.message.fetch();
 			if(reaction.partial) await reaction.fetch();

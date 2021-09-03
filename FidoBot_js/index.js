@@ -2,6 +2,7 @@ const fs = require('fs');
 const axios = require('axios'); //for updating "listening" message
 const config = require('./config.json');
 const testVisibility = require('./follow-fido integration/test_visibility');
+const colorDefs = require('./commands/color-roles');
 const Discord = require('discord.js');
 const client = new Discord.Client({partials: ["MESSAGE", "CHANNEL", "REACTION"]});
 client.commands = new Discord.Collection();
@@ -119,7 +120,7 @@ client.on('message', message => {
 
 	try {
 		if(command === 'colorroles'){
-			client.commands.get('colorroles').execute(message, args, Discord, client);
+			client.commands.get('colorroles').execute(message, Discord, client);
 		}
 		else{
 		client.commands.get(command).execute(message, args);

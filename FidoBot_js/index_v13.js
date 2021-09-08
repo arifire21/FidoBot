@@ -17,11 +17,12 @@ for (const file of commandFiles) {
 
 client.once('ready', () => {
 	console.log('FidoBot-- v13! Ready!');
-	client.user.setActivity('Now js v13!'); client.user.setStatus('online');
+	//client.user.setActivity('Now js v13!');
+	client.user.setStatus('dnd');
 });
 
 client.on('interactionCreate', async interaction => {
-	console.log(interaction);
+	// console.log(interaction);
 	if (!interaction.isCommand()) return;
 
 	const command = client.commands.get(interaction.commandName);

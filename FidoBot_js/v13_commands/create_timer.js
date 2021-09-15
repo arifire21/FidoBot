@@ -10,9 +10,9 @@ module.exports = {
 		.setName('createtimer')
 		.setDescription('timer that lasts for specified amnt, then sends message')
         .addIntegerOption(option => option.setName('time').setDescription('amnt of time (int)').setRequired(true))
-        .addStringOption(option => option.setName('duration').setDescription('s, m, or h').setRequired(true))
+        .addStringOption(option => option.setName('duration').setDescription('S (seconds), or M (minutes)').setRequired(true))
         .addStringOption(option => option.setName('message').setDescription('msg to send').setRequired(true))
-        .addRoleOption(option => option.setName('role').setDescription('Select a role to ping').setRequired(false))
+        .addRoleOption(option => option.setName('role').setDescription('Select a role to ping [wip]').setRequired(false))
         ,
 	
     async execute(interaction) {
@@ -24,10 +24,11 @@ module.exports = {
         userID = interaction.user.id;
         console.log("input time: " + inputTime); console.log("input msg: " + inputMsg);
 
-        arraySkeleton.timers.push(new BotTimer(inputTime,inputDuration, inputMsg, userID));
-        console.log(arraySkeleton.timers[arraySkeleton.timers.length-1].id);
+        // arraySkeleton.timers.push(new BotTimer(inputTime,inputDuration, inputMsg, userID));
+        // console.log(arraySkeleton.timers[arraySkeleton.timers.length-1].id);
         
-        const role = roleMention(roleID);
+        role = roleMention(roleID);
+        userToMention = userMention(userID);
         console.log("input role: " + role);
         
         inputTime.toString();
@@ -36,9 +37,16 @@ module.exports = {
         convertedTime = ms(catTime);
         console.log("converted to ms: " + convertedTime);
 
+        singleTimerOnly = false;
         //todo actually go based off id
-        await interaction.reply('`Timer id: ' + arraySkeleton.timers[arraySkeleton.timers.length-1].id + '.` Timer set for ' + catTime + '...');
-        timer.start(convertedTime);
+        if(timer.status == 'running'){
+            await interaction.reply(userToMention + ', right now I can only process one timer at a time. Please wait.');
+            singleTimerOnly = true;
+            console.log('timer not created, one already running');
+        }else{
+            await interaction.reply(userToMention + ', timer set for ' + catTime + '...');
+            timer.start(convertedTime);
+        }
 
         timer.on('done', () => {
             try {
@@ -46,9 +54,11 @@ module.exports = {
                 if(roleID){
                     interaction.followUp(role + ' ' + inputMsg);
                     //todo actually go based off id
-                    arraySkeleton.timers.pop()
+                    // arraySkeleton.timers.pop()
                 }else{
-                    interaction.followUp(inputMsg);
+                    if(singleTimerOnly){
+                        interaction.followUp(userToMention + ' -- ' + inputMsg);
+                    }
                 } 
             } catch (error) {}
         })

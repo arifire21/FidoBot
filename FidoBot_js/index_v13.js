@@ -16,6 +16,24 @@ for (const file of commandFiles) {
 }
 
 client.once('ready', () => {
+	//DELETE PER COMMAND BASIS
+	//using this to delete old/duplicate commands
+	// client.application.commands.fetch('888162717620240384') // id of your command
+	// 	.then( (command) => {
+	// console.log(`Fetched command ${command.name}`)
+	// // further delete it like so:
+	// command.delete()
+	// console.log(`Deleted command ${command.name}`)
+	// }).catch(console.error);
+
+	// client.application.commands.fetch('888163108281909248') // id of your command
+	// 	.then( (command) => {
+	// console.log(`Fetched command ${command.name}`)
+	// // further delete it like so:
+	// command.delete()
+	// console.log(`Deleted command ${command.name}`)
+	// }).catch(console.error);
+
 	console.log('FidoBot-- v13! Ready!');
 	client.user.setActivity('Now js v13!'); client.user.setStatus('online');
 });

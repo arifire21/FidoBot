@@ -1,7 +1,7 @@
 const { SlashCommandBuilder, userMention, roleMention } = require('@discordjs/builders');
 const Timer = require('tiny-timer');
 const ms = require('ms');
-const arraySkeleton = require('./structure/array_skeleton.js');
+const arraySkeleton = require('../../v13_commands/structure/array_skeleton.js');
 
 const timer = new Timer();
 

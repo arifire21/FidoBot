@@ -1,6 +1,6 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const Timer = require('tiny-timer');
-const timerArray = require('./structure/array_skeleton.js');
+const timerArray = require('../../v13_commands/structure/array_skeleton.js');
 
 const timer = new Timer();
 

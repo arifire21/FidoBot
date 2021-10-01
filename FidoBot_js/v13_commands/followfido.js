@@ -20,7 +20,7 @@ const row = new MessageActionRow()
 module.exports = {
     data: new SlashCommandBuilder()
     .setName('followfido')
-    .setDescription('Visit our stuff!')
+    .setDescription('About Us!')
     .addBooleanOption(option => option.setName('hide-buttons').setDescription('Make visible *only* to you').setRequired(true))
     ,
 

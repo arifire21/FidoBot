@@ -29,10 +29,10 @@ module.exports = {
         console.log('show button option: ' + boolean);
 
         if(boolean)
-            await interaction.reply({ content: 'Links below! :blue_heart:', ephemeral: true, components: [row] });
+            await interaction.reply({ content: 'Learn about us here! :blue_heart:', ephemeral: true, components: [row] });
         else{
         //if no option was clicked, or if user manually selected false
-            await interaction.reply({ content: 'Links below! :blue_heart:', components: [row] });
+            await interaction.reply({ content: 'Learn about us here! :blue_heart:', components: [row] });
         }
     }
 }

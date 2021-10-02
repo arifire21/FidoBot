@@ -15,6 +15,10 @@ const row = new MessageActionRow()
             .setLabel('FidoBot GitHub')
             .setStyle('LINK')
             .setURL('https://github.com/arifire21/FidoBot'),
+         new MessageButton()
+            .setLabel('The Spokesdog')
+            .setStyle('LINK')
+            .setURL('https://instagram.com/the.littlest.levi?utm_medium=copy_link'),
     )
 
 module.exports = {
